@@ -91,7 +91,7 @@ Legend:
 
 [P0] FR-15 - Pattern matching semantics
 
-- Must follow `.gitignore`-style matching.
+- Must use an in-house matcher inspired by `.gitignore` semantics, with a documented P0 subset.
 
 [P0] FR-16 - Pattern scope
 
