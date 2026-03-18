@@ -4,7 +4,7 @@
 **Project Manager:** @ciroalo  
 **Last Revision Date:** March 17, 2026  
 **Version:** 0.1.0  
-**Status:** Draft  
+**Status:** Accepted  
 
 Legend:  
 [P0] = MVP  
