@@ -23,11 +23,11 @@ This roadmap prioritizes:
 
 ### Milestone 0 - Repository foundation
 
-**Objective**  
+#### Objective
 
 Create the initial repository structure and documentation baseline.
 
-**Deliverable**
+#### Deliverable
 
 - Initialize rust project
 - Create repo folders
@@ -44,7 +44,7 @@ Create the initial repository structure and documentation baseline.
     - adr-002
 - Add `.gitignore`
 
-**Done Criteria**
+#### Done Criteria
 
 - Repository builds successfully
 - Project structure exists
