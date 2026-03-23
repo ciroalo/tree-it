@@ -1,12 +1,13 @@
 
-
-enum EntryKind {
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum EntryKind {
     Directory,
     File,
 }
 
-struct FsEntry {
-    relative_path: String,
-    name: String,
-    kind: EntryKind,
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct FsEntry {
+    pub relative_path: String,
+    pub name: String,
+    pub kind: EntryKind,
 }
