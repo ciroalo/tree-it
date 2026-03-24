@@ -1,15 +1,17 @@
 
-
-enum TreeNode {
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum TreeNode {
     Directory(DirectoryNode),
     File(FileNode),
 }
 
-struct DirectoryNode {
-    name: String,
-    children: Vec<TreeNode>,
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DirectoryNode {
+    pub name: String,
+    pub children: Vec<TreeNode>,
 }
 
-struct  FileNode {
-    name: String,
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct  FileNode {
+    pub name: String,
 }
