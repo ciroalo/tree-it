@@ -22,20 +22,20 @@ mod tests {
     use std::fs;
     use std::time::{SystemTime, UNIX_EPOCH};
 
-    fn create_temp_dir() -> std::path::PathBuf {
+    fn create_temp_dir(prefix: &str) -> std::path::PathBuf {
         let unique = SystemTime::now()
             .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_nanos();
 
-        let dir = std::env::temp_dir().join(format!("tree_it_test{unique}"));
+        let dir = std::env::temp_dir().join(format!("{prefix}_{unique}"));
         fs::create_dir_all(&dir).unwrap();
         dir
     }
 
     #[test]
     fn resolves_treeignore_when_present() {
-        let dir = create_temp_dir();
+        let dir = create_temp_dir("tree-it_resolves_treeignore");
         fs::write(dir.join(".treeignore"), "node_modules/\n").unwrap();
 
         let result = resolve_config_source(&dir);
@@ -52,7 +52,7 @@ mod tests {
 
     #[test]
     fn resolves_gitignore_when_present() {
-        let dir = create_temp_dir();
+        let dir = create_temp_dir("tree-it_resolves_gitignore");
         fs::write(dir.join(".gitignore"), "target/\n").unwrap();
 
         let result = resolve_config_source(&dir);
@@ -69,7 +69,7 @@ mod tests {
 
     #[test]
     fn prefers_treeignore_when_both_exist() {
-        let dir = create_temp_dir();
+        let dir = create_temp_dir("tree-it_prefers_treeignore_over_gitignore");
         fs::write(dir.join(".treeignore"), "node_modules/\n").unwrap();
         fs::write(dir.join(".gitignore"), "target/\n").unwrap();
 
@@ -87,7 +87,7 @@ mod tests {
 
     #[test]
     fn returns_none_when_no_config_exists() {
-        let dir = create_temp_dir();
+        let dir = create_temp_dir("tree-it_none_when_no_config");
 
         let result = resolve_config_source(&dir);
 
