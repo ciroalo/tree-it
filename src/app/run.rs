@@ -88,20 +88,20 @@ mod tests {
 
     use super::*;
 
-    fn create_temp_dir() -> PathBuf {
+    fn create_temp_dir(prefix: &str) -> PathBuf {
         let unique = SystemTime::now()
             .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_nanos();
 
-        let dir = std::env::temp_dir().join(format!("tree_it_app_test_unique{unique}"));
+        let dir = std::env::temp_dir().join(format!("{prefix}_{unique}"));
         fs::create_dir_all(&dir).unwrap();
         dir
     }
 
     #[test]
     fn runs_without_config() {
-        let dir = create_temp_dir();
+        let dir = create_temp_dir("treeit_runs_without_config");
         fs::create_dir_all(dir.join("src")).unwrap();
         fs::write(dir.join("src").join("main.rs"), "fn main() {}").unwrap();
 
@@ -121,7 +121,7 @@ mod tests {
 
     #[test]
     fn runs_with_treeignore_and_profile() {
-        let dir = create_temp_dir();
+        let dir = create_temp_dir("treeit_runs_with_treeignore_and_profile");
 
         fs::create_dir_all(dir.join("src")).unwrap();
         fs::create_dir_all(dir.join("tests")).unwrap();
@@ -151,7 +151,7 @@ tree_docs = [
 
     #[test]
     fn runs_single_profile_only() {
-        let dir = create_temp_dir();
+        let dir = create_temp_dir("treeit_runs_single_profile");
 
         fs::create_dir_all(dir.join("src")).unwrap();
         fs::create_dir_all(dir.join("tests")).unwrap();
@@ -182,7 +182,7 @@ tree_docs = [
 
     #[test]
     fn errors_on_invalid_profile() {
-        let dir = create_temp_dir();
+        let dir = create_temp_dir("treeit_errors_on_invalid_profile");
 
         fs::write(
             dir.join(".treeignore"),
@@ -208,7 +208,7 @@ tree_docs = [
 
     #[test]
     fn errors_when_profile_is_requested_without_treeignore() {
-        let dir = create_temp_dir();
+        let dir = create_temp_dir("treeit_errors_profile_without_treeignore");
 
         let request = CliRequest {
             target_path: dir.clone(),
