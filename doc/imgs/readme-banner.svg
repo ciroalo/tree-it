@@ -1,0 +1,38 @@
+<svg class="banner" viewBox="0 0 1200 300" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background -->
+                        <rect width="1200" height="300" fill="#ffffff"></rect>
+                        
+                        <!-- Subtle grid pattern -->
+                        <defs>
+                            <pattern id="grid1" width="40" height="40" patternUnits="userSpaceOnUse">
+                                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f0f0f0" stroke-width="0.5"></path>
+                            </pattern>
+                        </defs>
+                        <rect width="1200" height="300" fill="url(#grid1)" opacity="0.3"></rect>
+
+                        <!-- Logo: Minimalist Forest -->
+                        <g transform="translate(120, 75)">
+                            <!-- Left tree -->
+                            <rect x="-2" y="109" width="4" height="20" fill="#663300"></rect><polygon points="0,80 -15,110 15,110" fill="#1a472a"></polygon>
+                            <polygon points="0,65 -12,90 12,90" fill="#1a472a"></polygon>
+                            
+                            
+                            <!-- Middle tree (taller) -->
+                            <rect x="47.5" y="99" width="5" height="35" fill="#663300"></rect><polygon points="50,60 30,100 70,100" fill="#2d5a3d"></polygon>
+                            <polygon points="50,40 35,68 65,68" fill="#2d5a3d"></polygon>
+                            <polygon points="50,25 40,45 60,45" fill="#2d5a3d"></polygon>
+                            
+                            
+                            <!-- Right tree -->
+                            <rect x="98" y="109" width="4" height="20" fill="#663300"></rect><polygon points="100,80 85,110 115,110" fill="#1a472a"></polygon>
+                            <polygon points="100,65 88,90 112,90" fill="#1a472a"></polygon>
+                            
+                        </g>
+
+                        <!-- Text -->
+                        <text x="300" y="120" font-family="'Monaco', 'Menlo', monospace" font-size="72" font-weight="700" fill="#1a1a1a" letter-spacing="-2">tree-it</text>
+                        <text x="300" y="180" font-family="'Monaco', 'Menlo', monospace" font-size="24" fill="#666666" letter-spacing="1" font-weight="300">Enhanced CLI Tree Generator</text>
+
+                        <!-- Accent line -->
+                        <line x1="300" y1="200" x2="715" y2="200" stroke="#2d5a3d" stroke-width="3" stroke-linecap="round"></line>
+                    </svg>
