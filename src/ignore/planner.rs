@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::config::model::{ParsedConfig, ProfileConfig};
 use crate::ignore::model::{EffectiveIgnoreConfig, TreeJob};
 
@@ -6,6 +8,21 @@ pub enum PlanningError {
     ProfileRequiresTreeIgnore,
     ProfileNotFound(String),
 }
+
+impl fmt::Display for PlanningError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            PlanningError::ProfileRequiresTreeIgnore => {
+                write!(f, "A profile can only be used when a .treeignore file exists")
+            }
+            PlanningError::ProfileNotFound(name) => {
+                write!(f, "Profile '{name}' was not found in .treeignore")
+            }
+        }
+    }
+}
+
+impl std::error::Error for PlanningError {}
 
 pub fn plan_jobs(
     parsed_config: &ParsedConfig,
