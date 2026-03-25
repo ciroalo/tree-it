@@ -1,19 +1,8 @@
-mod app;
-mod cli;
-mod config;
-mod filter;
-mod fs;
-mod ignore;
-mod matcher;
-mod render;
-mod shared;
-mod tree;
-
 use std::env;
 use std::path::PathBuf;
 use std::process;
 
-use app::run::{run, CliRequest};
+use tree_it::app::run::{run, CliRequest};
 
 fn main() {
     let request = match parse_args() {
@@ -29,7 +18,7 @@ fn main() {
             println!("{output}");
         }
         Err(error) => {
-            eprintln!("Error: {error:?}");
+            eprintln!("Error: {error}");
             process::exit(1);
         }
     }
