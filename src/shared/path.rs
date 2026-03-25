@@ -1,3 +1,4 @@
+use std::fmt;
 use std::path::Path;
 
 #[derive(Debug)]
@@ -5,6 +6,18 @@ pub enum PathError {
     NotRelativeToRoot,
     InvalidUniCode,
 }
+
+impl fmt::Display for PathError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            PathError::NotRelativeToRoot => write!(f, "Path is not relative to the analyzed root"),
+            PathError::InvalidUniCode => write!(f, "Path contains invalid unicode"),
+        }
+    }
+}
+
+impl std::error::Error for PathError {}
+
 
 pub fn normalize_relative_path(root: &Path, path: &Path) -> Result<String, PathError> {
     let relative = path
