@@ -1,4 +1,5 @@
 use std::fs;
+use std::fmt;
 use std::path::Path;
 
 use crate::filter::evaluator::should_include;
@@ -12,6 +13,17 @@ pub enum WalkerError {
     Io(std::io::Error),
     Path(PathError),
 }
+
+impl fmt::Display for WalkerError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            WalkerError::Io(error) => write!(f, "Filesystem traversal error: {error}"),
+            WalkerError::Path(error) => write!(f, "Path normalization error: {error}")
+        }
+    }
+}
+
+impl std::error::Error for WalkerError {}
 
 impl From<std::io::Error> for WalkerError {
     fn from(value: std::io::Error) -> Self {

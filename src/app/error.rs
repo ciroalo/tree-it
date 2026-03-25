@@ -1,3 +1,5 @@
+use core::fmt;
+
 use crate::config::error::ConfigError;
 use crate::ignore::planner::PlanningError;
 use crate::matcher::error::MatcherError;
@@ -59,3 +61,21 @@ impl From<PathError> for AppError {
         Self::Path(value)
     }
 }
+
+impl fmt::Display for AppError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            AppError::InvalidArguments(message) => write!(f, "Invalid arguments: {message}"),
+            AppError::InvalidTargetPath(message) => write!(f, "{message}"),
+            AppError::Io(error) => write!(f, "I/O error: {error}"),
+            AppError::Config(error) => write!(f, "{error}"),
+            AppError::Planning(error) => write!(f, "{error}"),
+            AppError::Matcher(error) => write!(f, "{error}"),
+            AppError::Walker(error) => write!(f, "{error}"),
+            AppError::Render(error) => write!(f, "{error}"),
+            AppError::Path(error) => write!(f, "{error}"),
+        }
+    }
+}
+
+impl std::error::Error for AppError {}
