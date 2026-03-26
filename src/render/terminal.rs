@@ -1,5 +1,5 @@
 use crate::render::error::RenderError;
-use crate::tree::model::{DirectoryNode, FileNode, TreeNode};
+use crate::tree::model::{TreeNode};
 
 pub fn render_tree(root: &TreeNode) -> Result<String, RenderError> {
     match root {
