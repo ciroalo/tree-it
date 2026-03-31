@@ -18,7 +18,6 @@ impl fmt::Display for PathError {
 
 impl std::error::Error for PathError {}
 
-
 pub fn normalize_relative_path(root: &Path, path: &Path) -> Result<String, PathError> {
     let relative = path
         .strip_prefix(root)
