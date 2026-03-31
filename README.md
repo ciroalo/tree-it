@@ -65,14 +65,30 @@ Not yet implemented:
 Clone the repo and inside:
 
 ```bash
-cargo build --release
+git clone https://github.com/ciroalo/tree-it.git
+cd tree-it
+cargo install --path .
 ```
 
-The binary will be available at:
+Then verify:
 
 ```bash
-target/release/tree-it
+tree-it --help
 ```
+
+If `tree-it` is not found, make sure cargo's bin directory is in your path.
+
+### Install from a release asset
+
+Download the macOS release archive for your machine from the Github Release page, extract it, and move the binary into a directory in your `PATH`.
+
+Example:
+
+```bash
+tar -xzf tree-it-v0.1.0-macos-aarch64.tar.gz
+mv tree-it /usr/local/bin/tree-it
+```
+
 
 ---
 
@@ -280,6 +296,14 @@ Run with arguments
 
 ```bash
 cargo run -- --profile tree_docs
+```
+
+Before making any commit or PR request, make sure to run the following (test, lint, formatting):
+
+```bash
+cargo fmt
+cargo clippy --all-targets --all-features -- -D warnings
+cargo test
 ```
 
 ## Project Structure
