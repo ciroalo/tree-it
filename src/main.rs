@@ -2,7 +2,7 @@ use std::env;
 use std::path::PathBuf;
 use std::process;
 
-use tree_it::app::run::{run, CliRequest};
+use tree_it::app::run::{CliRequest, run};
 
 fn main() {
     let request = match parse_args() {
@@ -24,7 +24,6 @@ fn main() {
     }
 }
 
-
 fn parse_args() -> Result<CliRequest, String> {
     let mut args = env::args().skip(1);
 
@@ -37,7 +36,7 @@ fn parse_args() -> Result<CliRequest, String> {
                 print_help();
                 process::exit(0);
             }
-            "--profile"  => {
+            "--profile" => {
                 let value = args
                     .next()
                     .ok_or_else(|| "Missing value for --profile".to_string())?;
@@ -49,7 +48,6 @@ fn parse_args() -> Result<CliRequest, String> {
                 } else {
                     return Err(format!("Unexpected arguments: {arg}"));
                 }
-
             }
         }
     }
@@ -59,7 +57,10 @@ fn parse_args() -> Result<CliRequest, String> {
         None => env::current_dir().map_err(|e| format!("failed to get current directory: {e}"))?,
     };
 
-    Ok(CliRequest { target_path, profile })
+    Ok(CliRequest {
+        target_path,
+        profile,
+    })
 }
 
 fn print_help() {
