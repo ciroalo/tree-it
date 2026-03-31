@@ -1,4 +1,3 @@
-
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct EffectiveIgnoreConfig {
     pub patterns: Vec<String>,
