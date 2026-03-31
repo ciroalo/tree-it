@@ -32,15 +32,25 @@ fn parse_args() -> Result<CliRequest, String> {
     let mut profile: Option<String> = None;
 
     while let Some(arg) = args.next() {
-        if arg == "--profile" {
-            let value = args
-                .next()
-                .ok_or_else(|| "Missing value for --profile".to_string())?;
-            profile = Some(value.to_lowercase());
-        } else if target_path.is_none() {
-            target_path = Some(PathBuf::from(arg));
-        } else {
-            return Err(format!("Unexpected argument:{arg}"));
+        match arg.as_str() {
+            "--help" | "-h" => {
+                print_help();
+                process::exit(0);
+            }
+            "--profile"  => {
+                let value = args
+                    .next()
+                    .ok_or_else(|| "Missing value for --profile".to_string())?;
+                profile = Some(value.to_lowercase());
+            }
+            _ => {
+                if target_path.is_none() {
+                    target_path = Some(PathBuf::from(arg));
+                } else {
+                    return Err(format!("Unexpected arguments: {arg}"));
+                }
+
+            }
         }
     }
 
@@ -50,4 +60,49 @@ fn parse_args() -> Result<CliRequest, String> {
     };
 
     Ok(CliRequest { target_path, profile })
+}
+
+fn print_help() {
+    println!(
+        "\
+tree-it 0.1.0
+
+Generate documentation-friendly directory trees.
+
+USAGE:
+    tree-it [path] [--profile <name>]
+    tree-it --help
+
+ARGS:
+    [path]
+        Target directory to analyze.
+        If omitted, the current working directory is used.
+
+OPTIONS:
+    --profile <name>
+        Generate only the selected profile from .treeignore
+
+    -h, --help
+        Show this help message
+
+BEHAVIOR:
+    - If .treeignore exists, it is used
+    - Otherwise, if .gitignore exists, it is used
+    - Otherwise, the full tree is generated
+    - Without --profile, tree-it prints:
+        * the general tree
+        * all profile trees defined in .treeignore
+
+EXAMPLES:
+    tree-it
+    tree-it ./project
+    tree-it --profile tree_docs
+    tree-it ./project --profile tree_docs
+
+DEVELOPMENT:
+    When using Cargo, pass program arguments after --:
+        cargo run -- --help
+        cargo run -- --profile tree_docs
+"
+    );
 }
