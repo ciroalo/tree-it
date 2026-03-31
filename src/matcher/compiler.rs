@@ -3,7 +3,7 @@ use regex::Regex;
 use crate::matcher::error::MatcherError;
 use crate::matcher::pattern::{CompiledMatcher, CompiledPattern};
 
-pub fn compile_matcher(patterns: &[String]) -> Result< CompiledMatcher, MatcherError> {
+pub fn compile_matcher(patterns: &[String]) -> Result<CompiledMatcher, MatcherError> {
     let mut compiled_patterns = Vec::new();
 
     for pattern in patterns {
@@ -30,9 +30,7 @@ fn compile_pattern(pattern: &str) -> Result<CompiledPattern, MatcherError> {
     let directory_only = trimmed.ends_with('/');
     let root_anchored = trimmed.starts_with('/');
 
-    let normalized = trimmed
-        .trim_start_matches('/')
-        .trim_end_matches('/');
+    let normalized = trimmed.trim_start_matches('/').trim_end_matches('/');
 
     if normalized.is_empty() {
         return Err(MatcherError::InvalidPattern(trimmed.to_string()));
