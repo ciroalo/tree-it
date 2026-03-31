@@ -36,8 +36,8 @@ fn insert_parts(current: &mut DirectoryNode, parts: &[&str], kind: &EntryKind) {
                     TreeNode::Directory(dir) => dir.name == parts[0],
                     TreeNode::File(_) => false,
                 }) {
-                    current.children.push(TreeNode::Directory(DirectoryNode { 
-                        name: parts[0].to_string(), 
+                    current.children.push(TreeNode::Directory(DirectoryNode {
+                        name: parts[0].to_string(),
                         children: Vec::new(),
                     }));
                 }
@@ -47,8 +47,8 @@ fn insert_parts(current: &mut DirectoryNode, parts: &[&str], kind: &EntryKind) {
                     TreeNode::File(file) => file.name == parts[0],
                     TreeNode::Directory(_) => false,
                 }) {
-                    current.children.push(TreeNode::File(FileNode { 
-                        name: parts[0].to_string(), 
+                    current.children.push(TreeNode::File(FileNode {
+                        name: parts[0].to_string(),
                     }));
                 }
             }
@@ -67,8 +67,8 @@ fn insert_parts(current: &mut DirectoryNode, parts: &[&str], kind: &EntryKind) {
     let index = match existing_index {
         Some(index) => index,
         None => {
-            current.children.push(TreeNode::Directory(DirectoryNode { 
-                name: dir_name.to_string(), 
+            current.children.push(TreeNode::Directory(DirectoryNode {
+                name: dir_name.to_string(),
                 children: Vec::new(),
             }));
             current.children.len() - 1
@@ -138,7 +138,6 @@ mod tests {
                 }
             }
             _ => panic!("expected directory"),
-
         }
     }
 
@@ -160,7 +159,7 @@ mod tests {
                     assert!(dir.children.is_empty());
                 }
                 _ => panic!("expected directory"),
-            }
+            },
             _ => panic!("expected root directory"),
         }
     }
@@ -178,7 +177,7 @@ mod tests {
                 relative_path: "Cargo.toml".to_string(),
                 name: "Cargo.toml".to_string(),
                 kind: EntryKind::File,
-            }
+            },
         ];
 
         let tree = build_tree(&root, &entries);
