@@ -4,13 +4,18 @@ use crate::matcher::evaluator::is_match;
 use crate::matcher::pattern::CompiledMatcher;
 use crate::shared::path::is_hidden;
 
-pub fn should_include(path: &Path, relative_path: &str, is_dir: bool, matcher: &CompiledMatcher) -> bool {
+pub fn should_include(
+    path: &Path,
+    relative_path: &str,
+    is_dir: bool,
+    matcher: &CompiledMatcher,
+) -> bool {
     if is_hidden(path) {
         return false;
     }
 
     if is_match(matcher, relative_path, is_dir) {
-        return false
+        return false;
     }
 
     true
