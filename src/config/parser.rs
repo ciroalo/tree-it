@@ -42,10 +42,7 @@ pub fn parse_treeignore(contents: &str) -> Result<ParsedConfig, ConfigError> {
                 if normalized_name.ends_with("_tags") {
                     let profile_name = normalized_name.trim_end_matches("_tags").to_string();
 
-                    let profile = config
-                        .profiles
-                        .iter_mut()
-                        .find(|p| p.name == profile_name);
+                    let profile = config.profiles.iter_mut().find(|p| p.name == profile_name);
 
                     match profile {
                         Some(existing) => existing.tags = values,
@@ -79,7 +76,7 @@ pub fn parse_treeignore(contents: &str) -> Result<ParsedConfig, ConfigError> {
             }
 
             index = next_index;
-            continue
+            continue;
         }
 
         // otherwise treat as global exclusion
@@ -171,7 +168,7 @@ dist/
 node_modules/
 dist/
 "#;
-        
+
         let config = parse_treeignore(input).unwrap();
 
         assert_eq!(
