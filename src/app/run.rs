@@ -5,11 +5,11 @@ use crate::app::error::AppError;
 use crate::config::loader::resolve_config_source;
 use crate::config::model::ConfigSource;
 use crate::config::parser::{parse_gitignore, parse_treeignore};
+use crate::fs::walker::walk_filtered;
 use crate::ignore::planner::plan_jobs;
 use crate::matcher::compiler::compile_matcher;
 use crate::render::terminal::render_tree;
 use crate::tree::builder::build_tree;
-use crate::fs::walker::walk_filtered;
 
 #[derive(Debug, Clone)]
 pub struct CliRequest {
@@ -24,11 +24,7 @@ pub fn run(request: CliRequest) -> Result<String, AppError> {
     let parsed_config = load_and_parse_config(&config_source)?;
     let has_treeignore = matches!(config_source, ConfigSource::TreeIgnore(_));
 
-    let jobs = plan_jobs(
-        &parsed_config, 
-        request.profile.as_deref(), 
-        has_treeignore
-    )?;
+    let jobs = plan_jobs(&parsed_config, request.profile.as_deref(), has_treeignore)?;
 
     let mut rendered_outputs = Vec::new();
 
@@ -66,7 +62,9 @@ fn validate_target_path(path: &Path) -> Result<(), AppError> {
     Ok(())
 }
 
-fn load_and_parse_config(config_source: &ConfigSource) -> Result<crate::config::model::ParsedConfig, AppError> {
+fn load_and_parse_config(
+    config_source: &ConfigSource,
+) -> Result<crate::config::model::ParsedConfig, AppError> {
     match config_source {
         ConfigSource::TreeIgnore(path) => {
             let contents = fs::read_to_string(path)?;
