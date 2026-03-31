@@ -1,11 +1,11 @@
 use core::fmt;
 
 use crate::config::error::ConfigError;
+use crate::fs::walker::WalkerError;
 use crate::ignore::planner::PlanningError;
 use crate::matcher::error::MatcherError;
 use crate::render::error::RenderError;
 use crate::shared::path::PathError;
-use crate::fs::walker::WalkerError;
 
 #[derive(Debug)]
 pub enum AppError {
