@@ -16,6 +16,25 @@ with support for:
 
 ---
 
+## Table of Contents
+
+- [Current Status](#current-status)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Ignore File Resolution](#ignore-file-resolution)
+- [`treeignore` Format](#treeignore-format)
+- [Example](#example)
+- [Matching Behavior](#matching-behavior)
+- [Default Behavior](#default-behavior)
+- [Project Documentation](#project-documentation)
+- [Development](#development)
+- [Project Structure](#project-structure)
+- [Roadmap](#roadmap)
+- [License](#license)
+- [Author](#author)
+
+---
+
 ## Current Status
 
 This project is currently in MVP stage.
@@ -347,4 +366,9 @@ Planned future work includes:
 - expanded ignore matching support
 
 ## License
-TBD
+
+MIT License
+
+## Author
+
+Ciro Alonso
