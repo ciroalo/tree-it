@@ -22,12 +22,8 @@ mod tests {
 
     #[test]
     fn first_match_wins_by_returning_true_on_first_hit() {
-        let matcher = compile_matcher(&[
-            "dist/".to_string(),
-            "src/".to_string(),
-        ])
-        .unwrap();
-        
+        let matcher = compile_matcher(&["dist/".to_string(), "src/".to_string()]).unwrap();
+
         assert!(is_match(&matcher, "dist", true));
     }
 
