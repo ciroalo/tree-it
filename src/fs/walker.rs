@@ -1,12 +1,11 @@
-use std::fs;
 use std::fmt;
+use std::fs;
 use std::path::Path;
 
 use crate::filter::evaluator::should_include;
 use crate::fs::model::{EntryKind, FsEntry};
 use crate::matcher::pattern::CompiledMatcher;
-use crate::shared::path::{display_name, normalize_relative_path, PathError};
-
+use crate::shared::path::{PathError, display_name, normalize_relative_path};
 
 #[derive(Debug)]
 pub enum WalkerError {
@@ -18,7 +17,7 @@ impl fmt::Display for WalkerError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             WalkerError::Io(error) => write!(f, "Filesystem traversal error: {error}"),
-            WalkerError::Path(error) => write!(f, "Path normalization error: {error}")
+            WalkerError::Path(error) => write!(f, "Path normalization error: {error}"),
         }
     }
 }
@@ -74,12 +73,14 @@ fn walk_recursive(
             EntryKind::File
         };
 
-        children.push((FsEntry {
-            relative_path,
-            name, 
-            kind, 
-
-        }, path));
+        children.push((
+            FsEntry {
+                relative_path,
+                name,
+                kind,
+            },
+            path,
+        ));
     }
 
     sort_entries(&mut children);
@@ -110,7 +111,7 @@ mod tests {
     use std::fs;
     use std::path::PathBuf;
     use std::time::{SystemTime, UNIX_EPOCH};
-    
+
     use crate::matcher::compiler::compile_matcher;
 
     use super::*;
