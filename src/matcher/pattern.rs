@@ -11,5 +11,3 @@ pub struct CompiledPattern {
 pub struct CompiledMatcher {
     pub patterns: Vec<CompiledPattern>,
 }
-
-
