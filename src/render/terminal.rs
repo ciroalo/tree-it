@@ -1,5 +1,5 @@
 use crate::render::error::RenderError;
-use crate::tree::model::{TreeNode};
+use crate::tree::model::TreeNode;
 
 pub fn render_tree(root: &TreeNode) -> Result<String, RenderError> {
     match root {
@@ -18,7 +18,7 @@ pub fn render_tree(root: &TreeNode) -> Result<String, RenderError> {
 fn render_directory_children(children: &[TreeNode], prefix: &str, lines: &mut Vec<String>) {
     for (index, child) in children.iter().enumerate() {
         let is_last = index == children.len() - 1;
-        let connector = if is_last {"└── "} else {"├── "};
+        let connector = if is_last { "└── " } else { "├── " };
 
         match child {
             TreeNode::Directory(dir) => {
@@ -46,10 +46,10 @@ mod tests {
 
     #[test]
     fn renders_root_only() {
-        let tree = TreeNode::Directory(DirectoryNode { 
-            name: "project".to_string() , 
+        let tree = TreeNode::Directory(DirectoryNode {
+            name: "project".to_string(),
             children: vec![],
-        }); 
+        });
 
         let rendered = render_tree(&tree).unwrap();
 
@@ -58,12 +58,12 @@ mod tests {
 
     #[test]
     fn renders_single_file() {
-        let tree = TreeNode::Directory(DirectoryNode { 
-            name: "project".to_string() , 
-            children: vec![TreeNode::File(FileNode { 
+        let tree = TreeNode::Directory(DirectoryNode {
+            name: "project".to_string(),
+            children: vec![TreeNode::File(FileNode {
                 name: "Cargo.toml".to_string(),
             })],
-        }); 
+        });
 
         let rendered = render_tree(&tree).unwrap();
 
@@ -72,17 +72,23 @@ mod tests {
 
     #[test]
     fn renders_nested_structure() {
-        let tree = TreeNode::Directory(DirectoryNode { 
-            name: "project".to_string(), 
+        let tree = TreeNode::Directory(DirectoryNode {
+            name: "project".to_string(),
             children: vec![
-                TreeNode::Directory(DirectoryNode { 
+                TreeNode::Directory(DirectoryNode {
                     name: "src".to_string(),
                     children: vec![
-                        TreeNode::File(FileNode { name: "main.rs".to_string() }),
-                        TreeNode::File(FileNode { name: "lib.rs".to_string() }),
+                        TreeNode::File(FileNode {
+                            name: "main.rs".to_string(),
+                        }),
+                        TreeNode::File(FileNode {
+                            name: "lib.rs".to_string(),
+                        }),
                     ],
                 }),
-                TreeNode::File(FileNode { name: "Cargo.toml".to_string() }),
+                TreeNode::File(FileNode {
+                    name: "Cargo.toml".to_string(),
+                }),
             ],
         });
 
@@ -100,12 +106,20 @@ project/
 
     #[test]
     fn renders_multiple_sibling_directories_and_files() {
-        let tree = TreeNode::Directory(DirectoryNode { 
-            name: "project".to_string(), 
+        let tree = TreeNode::Directory(DirectoryNode {
+            name: "project".to_string(),
             children: vec![
-                TreeNode::Directory(DirectoryNode { name: "src".to_string(), children: vec![] }),
-                TreeNode::Directory(DirectoryNode { name: "tests".to_string(), children: vec![] }),
-                TreeNode::File(FileNode { name: "Cargo.toml".to_string() }),
+                TreeNode::Directory(DirectoryNode {
+                    name: "src".to_string(),
+                    children: vec![],
+                }),
+                TreeNode::Directory(DirectoryNode {
+                    name: "tests".to_string(),
+                    children: vec![],
+                }),
+                TreeNode::File(FileNode {
+                    name: "Cargo.toml".to_string(),
+                }),
             ],
         });
 
