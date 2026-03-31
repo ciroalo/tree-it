@@ -1,4 +1,3 @@
-
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum TreeNode {
     Directory(DirectoryNode),
@@ -12,6 +11,6 @@ pub struct DirectoryNode {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct  FileNode {
+pub struct FileNode {
     pub name: String,
 }
