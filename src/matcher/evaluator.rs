@@ -70,4 +70,20 @@ mod tests {
 
         assert!(!is_match(&matcher, "src/main.rs", false));
     }
+
+    #[test]
+    fn root_anchored_pattern_matches_only_at_root() {
+        let matcher = compile_matcher(&["/target".to_string()]).unwrap();
+
+        assert!(is_match(&matcher, "target", true));
+        assert!(!is_match(&matcher, "backend/target", true));
+    }
+
+    #[test]
+    fn root_anchored_directory_pattern_matches_only_root_directory() {
+        let matcher = compile_matcher(&["/target/".to_string()]).unwrap();
+
+        assert!(is_match(&matcher, "target", true));
+        assert!(!is_match(&matcher, "backend/target", true));
+    }
 }

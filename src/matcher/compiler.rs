@@ -28,13 +28,17 @@ fn compile_pattern(pattern: &str) -> Result<CompiledPattern, MatcherError> {
     }
 
     let directory_only = trimmed.ends_with('/');
-    let normalized = if directory_only {
-        &trimmed[..trimmed.len() - 1]
-    } else {
-        trimmed
-    };
+    let root_anchored = trimmed.starts_with('/');
 
-    let regex_string = build_regex_pattern(normalized);
+    let normalized = trimmed
+        .trim_start_matches('/')
+        .trim_end_matches('/');
+
+    if normalized.is_empty() {
+        return Err(MatcherError::InvalidPattern(trimmed.to_string()));
+    }
+
+    let regex_string = build_regex_pattern(normalized, root_anchored);
     let regex = Regex::new(&regex_string)
         .map_err(|_| MatcherError::RegexBuildFailed(trimmed.to_string()))?;
 
@@ -45,8 +49,13 @@ fn compile_pattern(pattern: &str) -> Result<CompiledPattern, MatcherError> {
     })
 }
 
-fn build_regex_pattern(pattern: &str) -> String {
-    let mut regex = String::from("(^|.*/)");
+fn build_regex_pattern(pattern: &str, root_anchored: bool) -> String {
+    let mut regex = if root_anchored {
+        String::from("^")
+    } else {
+        String::from("(^|.*/)")
+    };
+
     let chars: Vec<char> = pattern.chars().collect();
     let mut i = 0;
 
@@ -139,5 +148,22 @@ mod tests {
 
         assert!(compiled.regex.is_match("src/foo/mod.rs"));
         assert!(compiled.regex.is_match("src/foo/bar/mod.rs"));
+    }
+
+    #[test]
+    fn compiles_root_anchored_pattern() {
+        let compiled = compile_pattern("/target").unwrap();
+
+        assert!(compiled.regex.is_match("target"));
+        assert!(!compiled.regex.is_match("backend/target"));
+    }
+
+    #[test]
+    fn compiles_root_anchored_directory_pattern() {
+        let compiled = compile_pattern("/target/").unwrap();
+
+        assert!(compiled.directory_only);
+        assert!(compiled.regex.is_match("target"));
+        assert!(!compiled.regex.is_match("backend/target"));
     }
 }
