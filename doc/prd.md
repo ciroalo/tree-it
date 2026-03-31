@@ -2,8 +2,8 @@
 
 **Project Name:** tree-it  
 **Project Manager:** @ciroalo  
-**Last Revision Date:** March 17, 2026  
-**Version:** 0.1.0  
+**Last Revision Date:** March 31, 2026  
+**Version:** 0.1.1  
 **Status:** Accepted  
 
 Legend:  
@@ -92,6 +92,15 @@ Legend:
 [P0] FR-15 - Pattern matching semantics
 
 - Must use an in-house matcher inspired by `.gitignore` semantics, with a documented P0 subset.
+- In P0, the matcher supports a documented subset of `.gitignore`-style behavior.
+- Supported pattern features in P0 include:
+    - `*`
+    - `?`
+    - `**`
+    - trailing `/` for directory-only matching
+    - matching against a normalized relative paths
+    - matching anywhere in the analyzed tree
+- Negation pattern `!` are not supported, neither full `.gitignore` compatibility.
 
 [P0] FR-16 - Pattern scope
 
