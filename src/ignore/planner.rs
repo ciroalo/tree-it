@@ -13,7 +13,10 @@ impl fmt::Display for PlanningError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             PlanningError::ProfileRequiresTreeIgnore => {
-                write!(f, "A profile can only be used when a .treeignore file exists")
+                write!(
+                    f,
+                    "A profile can only be used when a .treeignore file exists"
+                )
             }
             PlanningError::ProfileNotFound(name) => {
                 write!(f, "Profile '{name}' was not found in .treeignore")
@@ -32,7 +35,7 @@ pub fn plan_jobs(
     match selected_profile {
         Some(profile_name) => {
             if !has_treeignore {
-                return Err(PlanningError::ProfileRequiresTreeIgnore)
+                return Err(PlanningError::ProfileRequiresTreeIgnore);
             }
 
             let normalized_name = profile_name.to_lowercase();
@@ -61,7 +64,7 @@ pub fn plan_jobs(
 fn build_general_job(parsed_config: &ParsedConfig) -> TreeJob {
     TreeJob {
         label: "general".to_string(),
-        effective_ignore: EffectiveIgnoreConfig{
+        effective_ignore: EffectiveIgnoreConfig {
             patterns: parsed_config.global_excludes.clone(),
         },
     }
@@ -71,7 +74,7 @@ fn build_profile_job(parsed_config: &ParsedConfig, profile: &ProfileConfig) -> T
     let mut patterns = parsed_config.global_excludes.clone();
     patterns.extend(profile.excludes.clone());
 
-    TreeJob{
+    TreeJob {
         label: profile.name.clone(),
         effective_ignore: EffectiveIgnoreConfig { patterns },
     }
@@ -90,7 +93,7 @@ mod tests {
                     name: "tree_docs".to_string(),
                     excludes: vec!["tests/".to_string(), ".github/".to_string()],
                     tags: vec![],
-                }, 
+                },
                 ProfileConfig {
                     name: "tree_public".to_string(),
                     excludes: vec!["internal/".to_string()],
@@ -130,7 +133,7 @@ mod tests {
         let config = sample_config();
 
         let jobs = plan_jobs(&config, Some("tree_docs"), true).unwrap();
-        
+
         assert_eq!(jobs.len(), 1);
         assert_eq!(jobs[0].label, "tree_docs");
         assert_eq!(
@@ -161,7 +164,7 @@ mod tests {
         let result = plan_jobs(&config, Some("tree_docs"), false);
 
         assert!(matches!(
-            result, 
+            result,
             Err(PlanningError::ProfileRequiresTreeIgnore)
         ));
     }
