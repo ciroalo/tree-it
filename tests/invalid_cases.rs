@@ -1,10 +1,10 @@
 mod common;
 
-use std::path::PathBuf;
 use std::fs;
+use std::path::PathBuf;
 
 use common::fixture::{cleanup_temp_dir, create_temp_dir};
-use tree_it::app::run::{run, CliRequest};
+use tree_it::app::run::{CliRequest, run};
 
 #[test]
 fn invalid_profile_returns_error() {

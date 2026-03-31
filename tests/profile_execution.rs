@@ -3,7 +3,7 @@ mod common;
 use std::fs;
 
 use common::fixture::{cleanup_temp_dir, create_temp_dir};
-use tree_it::app::run::{run, CliRequest};
+use tree_it::app::run::{CliRequest, run};
 
 #[test]
 fn selected_profile_generates_only_that_profile_output() {
