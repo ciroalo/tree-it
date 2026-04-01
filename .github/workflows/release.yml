@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release tag to build and upload"
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -14,21 +20,44 @@ jobs:
     runs-on: macos-latest
 
     steps:
+      - name: Determine version/ref
+        id: vars
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ inputs.version }}"
+            REF="$VERSION"
+          else
+            VERSION="${{ github.ref_name }}"
+            REF="${{ github.ref }}"
+          fi
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "ref=$REF" >> "$GITHUB_OUTPUT"
+
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.vars.outputs.ref }}
 
       - name: Install Rust toolchain
+        shell: bash
         run: |
           rustup toolchain install stable --profile minimal
           rustup default stable
+
+      - name: Run tests
+        run: cargo test --all-targets
 
       - name: Build release binary
         run: cargo build --release
 
       - name: Prepare release assets
+        shell: bash
         run: |
-          VERSION="${GITHUB_REF_NAME}"
+          VERSION="${{ steps.vars.outputs.version }}"
           ARCH="$(uname -m)"
+
           if [ "$ARCH" = "arm64" ]; then
             TARGET_LABEL="macos-aarch64"
           else
@@ -39,27 +68,44 @@ jobs:
           cp target/release/tree-it dist/tree-it
           chmod +x dist/tree-it
 
-          tar -C dist -czf "tree-it-${VERSION}-${TARGET_LABEL}.tar.gz" tree-it
-          shasum -a 256 "tree-it-${VERSION}-${TARGET_LABEL}.tar.gz" > "tree-it-${VERSION}-${TARGET_LABEL}.sha256"
+          ARCHIVE="tree-it-${VERSION}-${TARGET_LABEL}.tar.gz"
+          CHECKSUM="tree-it-${VERSION}-${TARGET_LABEL}.sha256"
 
-      - name: Upload workflow artifacts
-        uses: actions/upload-artifact@v6
+          tar -C dist -czf "$ARCHIVE" tree-it
+          shasum -a 256 "$ARCHIVE" > "$CHECKSUM"
+
+          echo "archive=$ARCHIVE" >> "$GITHUB_OUTPUT"
+          echo "checksum=$CHECKSUM" >> "$GITHUB_OUTPUT"
+        id: package
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: tree-it-${{ github.ref_name }}-macos
+          name: tree-it-${{ steps.vars.outputs.version }}-macos
           path: |
-            tree-it-${{ github.ref_name }}-macos-*.tar.gz
-            tree-it-${{ github.ref_name }}-macos-*.sha256
+            ${{ steps.package.outputs.archive }}
+            ${{ steps.package.outputs.checksum }}
 
-      - name: Create GitHub release and upload assets
+      - name: Ensure GitHub release exists
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
         run: |
-          VERSION="${GITHUB_REF_NAME}"
-          ARCHIVE="$(ls tree-it-${VERSION}-macos-*.tar.gz)"
-          CHECKSUM="$(ls tree-it-${VERSION}-macos-*.sha256)"
+          VERSION="${{ steps.vars.outputs.version }}"
 
+          gh release view "$VERSION" >/dev/null 2>&1 || \
           gh release create "$VERSION" \
-            "$ARCHIVE" \
-            "$CHECKSUM" \
             --title "tree-it $VERSION" \
-            --notes "Initial release assets for $VERSION."
+            --notes "Release assets for $VERSION."
+
+      - name: Upload or replace release assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          VERSION="${{ steps.vars.outputs.version }}"
+
+          gh release upload "$VERSION" \
+            "${{ steps.package.outputs.archive }}" \
+            "${{ steps.package.outputs.checksum }}" \
+            --clobber
