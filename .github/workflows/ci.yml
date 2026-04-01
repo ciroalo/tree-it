@@ -21,7 +21,8 @@ jobs:
 
       - name: Install Rust toolchain
         run: |
-          rustup toolchain install stable --profile minimal --component rustfmt clippy
+          rustup toolchain install stable --profile minimal
+          rustup component add rustfmt clippy
           rustup default stable
 
       - name: Check formatting
