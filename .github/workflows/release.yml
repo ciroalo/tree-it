@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    name: Build macOS release binary
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+
+      - name: Build release binary
+        run: cargo build --release
+
+      - name: Prepare release assets
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          ARCH="$(uname -m)"
+          if [ "$ARCH" = "arm64" ]; then
+            TARGET_LABEL="macos-aarch64"
+          else
+            TARGET_LABEL="macos-x86_64"
+          fi
+
+          mkdir -p dist
+          cp target/release/tree-it dist/tree-it
+          chmod +x dist/tree-it
+
+          tar -C dist -czf "tree-it-${VERSION}-${TARGET_LABEL}.tar.gz" tree-it
+          shasum -a 256 "tree-it-${VERSION}-${TARGET_LABEL}.tar.gz" > "tree-it-${VERSION}-${TARGET_LABEL}.sha256"
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: tree-it-${{ github.ref_name }}-macos
+          path: |
+            tree-it-${{ github.ref_name }}-macos-*.tar.gz
+            tree-it-${{ github.ref_name }}-macos-*.sha256
+
+      - name: Create GitHub release and upload assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          ARCHIVE="$(ls tree-it-${VERSION}-macos-*.tar.gz)"
+          CHECKSUM="$(ls tree-it-${VERSION}-macos-*.sha256)"
+
+          gh release create "$VERSION" \
+            "$ARCHIVE" \
+            "$CHECKSUM" \
+            --title "tree-it $VERSION" \
+            --notes "Initial release assets for $VERSION."
