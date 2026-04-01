@@ -66,7 +66,7 @@ fn parse_args() -> Result<CliRequest, String> {
 fn print_help() {
     println!(
         "\
-tree-it 0.1.0
+tree-it 0.1.1
 
 Generate documentation-friendly directory trees.
 
