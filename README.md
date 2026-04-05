@@ -1,8 +1,7 @@
 # tree-it
 
-[![CI](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/OWNER/REPO?display_name=tag)](https://github.com/OWNER/REPO/releases)
-[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/OWNER/REPO/total)](https://github.com/OWNER/REPO/releases)
+![CI](https://github.com/ciroalo/tree-it/actions/workflows/ci.yml/badge.svg)
+![Release](https://img.shields.io/github/v/release/ciroalo/tree-it)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![Rust](https://img.shields.io/badge/language-Rust-orange)](https://www.rust-lang.org/)
 [![CLI](https://img.shields.io/badge/type-CLI-informational)](#)
